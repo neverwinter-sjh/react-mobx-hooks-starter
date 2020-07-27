@@ -20,10 +20,7 @@
     "build": "cross-env react-scripts build",
     "test": "cross-env react-scripts test",
     "eject": "cross-env react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
+  },  
   "browserslist": {
     "production": [
       ">0.2%",
