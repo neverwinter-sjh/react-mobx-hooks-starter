@@ -1,45 +1,37 @@
-import React from 'react';
-import Counter from 'components/Counter';
-import {
-  Switch,
-  Route,
-  Link,
-  useLocation,
-  useParams
-} from "react-router-dom";
-import Home from 'routes/Home';
-import About from 'routes/About';
+import React, { useEffect } from 'react';
+import { useObserver } from 'mobx-react';
+import useStore from 'store/index';
+import axios from 'axios';
 
 const App = () => {
-  const location = useLocation();
-  const params = useParams();
-  console.log(params);
-  return (
-    <div>
-      <p>Current path name: {location.pathname}</p>
-      <div>
-        <ul>
-          <li>
-            <Link to="/">Home</Link>
-          </li>
-          <li>
-            <Link to="/about">About</Link>
-          </li>
-        </ul>
-        
-        <Counter />
+  const { store } = useStore(); 
 
-        <Switch>
-          <Route path="/about">
-            <About />
-          </Route>
-          <Route path="/">
-            <Home />
-          </Route>
-        </Switch>
-      </div>
+  useEffect(() => {
+    console.log(store.object);
+  }, [store.object]);
+
+  const getData = async () => {
+    const result = await axios.get('https://jsonplaceholder.typicode.com/todos/1');
+    store.setObject(result.data);         
+    return result;
+  }
+
+  useEffect(() => {
+    const data = getData();    
+  }, []);  
+
+  const getData2 = async () => {
+    const result = getData();    
+  }
+  
+  return useObserver(() => (
+    <div>
+      <button type="button" onClick={getData2}>Get Data</button>
+      <p>
+        {JSON.stringify(store.object, null, 2)}
+      </p>
     </div>
-  );
+  ));
 };
 
 export default App;
